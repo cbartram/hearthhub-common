@@ -123,7 +123,7 @@ type WorldDetails struct {
 	DeletedAt             gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
 
 	// Relations
-	Modifiers []Modifier `gorm:"foreignKey:WorldID" json:"modifiers,omitempty"`
+	Modifiers []Modifier `gorm:"foreignKey:WorldID" json:"modifiers"`
 }
 
 func (c WorldDetails) ToStringArgs() string {
@@ -183,6 +183,7 @@ func GetUser(discordId string, db *gorm.DB) (*User, error) {
 	var user User
 	tx := db.Preload("Servers").
 		Preload("Servers.WorldDetails").
+		Preload("Servers.WorldDetails.Modifiers").
 		Preload("ModFiles").
 		Preload("ConfigFiles").
 		Preload("BackupFiles").
