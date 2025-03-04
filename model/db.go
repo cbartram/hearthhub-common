@@ -229,10 +229,6 @@ func (Server) TableName() string {
 	return "servers"
 }
 
-type GenericFile interface {
-	GetBaseFile() *BaseFile
-}
-
 // BaseFile contains common fields for all file types
 type BaseFile struct {
 	ID        uint           `gorm:"primaryKey" json:"id"`
@@ -254,10 +250,6 @@ type BackupFile struct {
 	BaseFile
 }
 
-func (b BackupFile) GetBaseFile() *BaseFile {
-	return &b.BaseFile
-}
-
 func (BackupFile) TableName() string {
 	return "backup_files"
 }
@@ -265,10 +257,6 @@ func (BackupFile) TableName() string {
 // ConfigFile represents a server configuration file
 type ConfigFile struct {
 	BaseFile
-}
-
-func (c ConfigFile) GetBaseFile() *BaseFile {
-	return &c.BaseFile
 }
 
 func (ConfigFile) TableName() string {
@@ -287,10 +275,6 @@ type ModFile struct {
 	Description        string    `json:"description"`
 }
 
-func (m ModFile) GetBaseFile() *BaseFile {
-	return &m.BaseFile
-}
-
 func (ModFile) TableName() string {
 	return "mod_files"
 }
@@ -298,14 +282,6 @@ func (ModFile) TableName() string {
 // WorldFile represents a world save file (which is not a backup).
 type WorldFile struct {
 	BaseFile
-	ServerID uint `gorm:"column:server_id;index" json:"server_id"`
-
-	// Relations
-	Server Server `gorm:"foreignKey:ServerID" json:"-"`
-}
-
-func (w WorldFile) GetBaseFile() *BaseFile {
-	return &w.BaseFile
 }
 
 func (WorldFile) TableName() string {
