@@ -105,7 +105,7 @@ func (Modifier) TableName() string {
 type WorldDetails struct {
 	ID                    uint           `gorm:"primaryKey" json:"id"`
 	Name                  string         `gorm:"column:name;not null" json:"name"` // The name of the server
-	ServerID              uint           `gorm:"column:server_id;index;not null" json:"server_id"`
+	ServerID              uint           `gorm:"column:server_id;unique;index" json:"server_id"`
 	World                 string         `gorm:"column:world;not null" json:"world"` // The name of the world
 	CPURequests           int            `gorm:"column:cpu_requests;not null;default:1" json:"cpu_requests"`
 	MemoryRequests        int            `gorm:"column:memory_requests;not null;default:1024" json:"memory_requests"`
@@ -124,6 +124,7 @@ type WorldDetails struct {
 
 	// Relations
 	Modifiers []Modifier `gorm:"foreignKey:WorldID" json:"modifiers,omitempty"`
+	Server    Server     `gorm:"foreignKey:WorldDetailsID" json:"-"`
 }
 
 func (c WorldDetails) ToStringArgs() string {
@@ -218,9 +219,9 @@ type Server struct {
 	DeletedAt      gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
 
 	// Relations
-	User         User         `gorm:"foreignKey:UserID" json:"-"`
-	WorldDetails WorldDetails `gorm:"foreignKey:ServerID;references:ID" json:"world_details"`
-	WorldFiles   []WorldFile  `gorm:"foreignKey:ServerID" json:"world_files,omitempty"`
+	User           User          `gorm:"foreignKey:UserID" json:"-"`
+	WorldDetailsID uint          `gorm:"column:world_details_id;unique" json:"world_details_id"`
+	WorldDetails   *WorldDetails `gorm:"foreignKey:WorldDetailsID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"world_details"`
 }
 
 func (Server) TableName() string {
