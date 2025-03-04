@@ -205,6 +205,7 @@ func (User) TableName() string {
 // Server represents a Valheim game server
 type Server struct {
 	ID             uint           `gorm:"primaryKey" json:"id"`
+	Name           string         `gorm:"column:name" json:"name"`
 	UserID         uint           `gorm:"column:user_id;index" json:"user_id"`
 	ServerIP       string         `gorm:"column:server_ip" json:"server_ip"`
 	ServerPort     int            `gorm:"column:server_port" json:"server_port"`
@@ -221,7 +222,7 @@ type Server struct {
 
 	// Relations
 	User         User         `gorm:"foreignKey:UserID" json:"-"`
-	WorldDetails WorldDetails `gorm:"foreignKey:ServerID;" json:"world_details"`
+	WorldDetails WorldDetails `gorm:"foreignKey:ServerID" json:"world_details"`
 }
 
 func (Server) TableName() string {
