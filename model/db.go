@@ -123,7 +123,7 @@ type WorldDetails struct {
 	DeletedAt             gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
 
 	// Relations
-	Modifiers []Modifier `gorm:"foreignKey:WorldID" json:"modifiers"`
+	Modifiers []Modifier `gorm:"foreignKey:WorldID;constraint:OnDelete:CASCADE" json:"modifiers"`
 }
 
 func (c WorldDetails) ToStringArgs() string {
@@ -222,7 +222,7 @@ type Server struct {
 
 	// Relations
 	User         User         `gorm:"foreignKey:UserID" json:"-"`
-	WorldDetails WorldDetails `gorm:"foreignKey:ServerID" json:"world_details"`
+	WorldDetails WorldDetails `gorm:"foreignKey:ServerID;constraint:OnDelete:CASCADE" json:"world_details"`
 }
 
 func (Server) TableName() string {
