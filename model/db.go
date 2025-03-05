@@ -267,6 +267,7 @@ func (ConfigFile) TableName() string {
 type ModFile struct {
 	BaseFile
 	UpVotes            int       `gorm:"column:upvotes" json:"upvotes"`
+	ModId              int       `gorm:"column:mod_id" json:"mod_id"`
 	Downloads          int       `gorm:"column:downloads" json:"downloads"`
 	OriginalUploadDate time.Time `gorm:"column:original_upload_date" json:"original_upload_date"`
 	LatestUploadDate   time.Time `gorm:"column:latest_upload_date" json:"latest_upload_date"`
